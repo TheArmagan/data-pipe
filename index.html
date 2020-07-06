@@ -78,7 +78,7 @@
                 document.querySelector("#kao_description").innerText = document.querySelector("code").innerText.replace(`{${e[0]}}`,e[1]);
             });
 
-            document.querySelector("#kao_settings").innerText = entries.filter(i=>i[1]).map(i=>`    - ${i[0]}: ${i[1]}`).join("\n");
+            document.querySelector("#kao_settings").innerText = entries.filter(i=>typeof i[1] != "undefined").map(i=>`    - ${i[0]}: ${i[1]}`).join("\n");
         });
 
         fetch("/LICENSE").then(d => d.text()).then(t=>{
