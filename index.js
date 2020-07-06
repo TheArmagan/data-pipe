@@ -2,7 +2,7 @@ if (process.env.NODE_ENV != "production") require("dotenv").config();
 const KAO_VERSION = "2.1"; // Do Not Change
 
 // Options
-const USER_NOTE = process.env.USER_NOTE || "";
+const USER_NOTE = process.env.USER_NOTE || "User note is not set.";
 const MAX_CONTENT_LENGTH = parseInt(process.env.MAX_CONTENT_LENGTH) || 2000000; // 2MB
 const MAX_HEADER_AMOUNT = parseInt(process.env.MAX_HEADER_AMOUNT) || 100;
 const SEND_REAL_IP_ON_HEADERS = typeof process.env.SEND_REAL_IP_ON_HEADERS != "undefined" ? parseBool(process.env.SEND_REAL_IP_ON_HEADERS) : true;
