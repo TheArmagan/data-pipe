@@ -1,0 +1,20 @@
+{
+  "name": "data-pipe",
+  "version": "1.0.0",
+  "description": "KAO Data Pipe",
+  "main": "index.js",
+  "dependencies": {
+    "cli-color": "^2.0.0",
+    "convert-stream": "^1.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "got": "^11.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Kıraç Armağan Önal",
+  "license": "Apache-2.0"
+}

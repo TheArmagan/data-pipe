@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAO Data Pipe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: black;
+            color: silver;
+        }
+
+        code {
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        pre {
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<pre>
+<br>
+<center><h1>--MAIN--</h1></center>
+<br>
+<code id="kao_description">
+    KAO Data Pipe Version {KAO_VERSION}
+
+    Supports all type of methods.
+    Only supports http/https urls.
+    Supports requests with body. (Max Size: {MAX_CONTENT_LENGTH}byte)
+    Supports custom headers.
+
+    Basic usage:
+        Usage:
+            - {ORIGIN_URL}/[url]
+
+        Example:
+            - {ORIGIN_URL}/https://google.com
+
+    Custom request header examples:
+        Usage:
+            - dp-[header-name]
+
+        Example:
+            - dp-user-agent: CoolUserAgent/1.0
+
+        You can test with:
+            - {ORIGIN_URL}/https://wtfismyip.com/headers
+</code>
+<br>
+<center><h1>--SETTINGS--</h1></center>
+<br>
+<code id="kao_settings"></code>
+<br>
+<center><h1>--LICENSE--</h1></center>
+<br>
+<code id="kao_license"></code>
+<br>
+</pre>
+    <script>
+        fetch("/KAO_SETTINGS").then(d => d.json()).then(d => {
+            /** @type {Array<Array<string>>} */
+            let entries = Object.entries(d);
+            entries.forEach(e=>{
+                document.querySelector("#kao_description").innerText = document.querySelector("code").innerText.replace(`{${e[0]}}`,e[1]);
+            });
+
+            document.querySelector("#kao_settings").innerText = entries.filter(i=>i[1]).map(i=>`    - ${i[0]}: ${i[1]}`).join("\n");
+        });
+
+        fetch("/LICENSE").then(d => d.text()).then(t=>{
+            document.querySelector("#kao_license").innerText = t;
+        });
+
+        document.querySelector("#kao_description").innerText = document.querySelector("#kao_description").innerText.replace(/\{ORIGIN_URL\}/gm,window.location.origin)
+    </script>
+</body>
+
+</html>
