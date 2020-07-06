@@ -25,3 +25,6 @@
     - You can test with:
         - https://kao-datapipe-1.herokuapp.com/https://wtfismyip.com/headers
 
+
+### License
+Apache-2.0
