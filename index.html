@@ -42,6 +42,7 @@
     Only supports http/https urls.
     Supports requests with body. (Max Size: {MAX_CONTENT_LENGTH}byte)
     Supports custom headers.
+    Allows any kind of CORS request.
 
     Basic usage:
         Usage:
@@ -71,7 +72,7 @@
 <br>
 </pre>
     <script>
-        fetch("/KAO_SETTINGS").then(d => d.json()).then(d => {
+        fetch("/&SETTINGS").then(d => d.json()).then(d => {
             /** @type {Array<Array<string>>} */
             let entries = Object.entries(d);
             entries.forEach(e=>{
@@ -81,7 +82,7 @@
             document.querySelector("#kao_settings").innerText = entries.map(i=>`    - ${i[0]}: ${i[1]}`).join("\n");
         });
 
-        fetch("/LICENSE").then(d => d.text()).then(t=>{
+        fetch("/&LICENSE").then(d => d.text()).then(t=>{
             document.querySelector("#kao_license").innerText = t;
         });
 

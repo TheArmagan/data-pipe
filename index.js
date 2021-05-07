@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV != "production") require("dotenv").config();
-const KAO_VERSION = "2.1"; // Do Not Change
+const KAO_VERSION = "2.1.1"; // Do Not Change
 
 // Options
 const USER_NOTE = process.env.USER_NOTE || "User note is not set.";
@@ -20,8 +20,8 @@ process.env.PORT = process.env.PORT || 3000;
 app.set("trust proxy", true);
 app.set("x-powered-by", false);
 
-app.get("/KAO_SETTINGS",(req, res)=>{res.send({KAO_VERSION, USER_NOTE, MAX_CONTENT_LENGTH, MAX_HEADER_AMOUNT, SEND_REAL_IP_ON_HEADERS, LOG_REQUESTS})});
-app.get("/LICENSE", (req, res)=> {fs.createReadStream("./LICENSE").pipe(res)});
+app.get("/&SETTINGS",(req, res)=>{res.send({KAO_VERSION, USER_NOTE, MAX_CONTENT_LENGTH, MAX_HEADER_AMOUNT, SEND_REAL_IP_ON_HEADERS, LOG_REQUESTS})});
+app.get("/&LICENSE", (req, res)=> {fs.createReadStream("./LICENSE").pipe(res)});
 
 // Safety middleware
 let mainMiddleware = (req, res, next)=>{
@@ -62,9 +62,13 @@ app.all("/*", mainMiddleware, async (req, res)=>{
     },{});
 
     if (SEND_REAL_IP_ON_HEADERS) _headers["dp-original-ip"] = req.ip;
-    _headers["user-agent"] = _headers["user-agent"] || "KaoDataPipe/"+KAO_VERSION;
+    _headers["user-agent"] = _headers["user-agent"] || `KaoDataPipe/${KAO_VERSION}`;
 
     res.setHeader("access-control-allow-origin", "*");
+    res.setHeader("access-control-allow-headers", "*");
+    res.setHeader("access-control-allow-methods", "*");
+    res.setHeader("access-control-allow-credentials", "true");
+    res.setHeader("access-control-max-age", "900");
 
     let gotOpts = {
         method: req.method,
@@ -93,10 +97,12 @@ function parseBool(t="") {
     switch (t.toLowerCase()) {
         case "0":
         case "false":
+        case "no":
             result = false;
             break
         case "1":
         case "true":
+        case "yes":
             result = true;
             break
     }
