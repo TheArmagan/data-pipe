@@ -56,7 +56,7 @@ app.all("/*", mainMiddleware, async (req, res)=>{
     }
 
 
-    let _headers = Object.keys(req.headers).filter(i=>i.startsWith("dp")).reduce((all, current)=>{
+    let _headers = Object.keys(req.headers).filter(i=>i.startsWith("dp-")).reduce((all, current)=>{
         all[current.slice(3)] = req.headers[current];
         return all;
     },{});
