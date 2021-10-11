@@ -25,7 +25,14 @@ http.createServer(async (req, res) => {
             maxRedirects: 10
         });
 
-        res.writeHead(response.status, response.statusText, response.headers);
+        let headers = {
+            ...response.headers,
+            "Access-Control-Allow-Origin": "*",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache"
+        }
+
+        res.writeHead(response.status, response.statusText, headers);
         response.data.pipe(res);
     } catch (err) {
         console.log(err);
