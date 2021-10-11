@@ -85,6 +85,9 @@ app.all("/*", mainMiddleware, async (req, res)=>{
         stream.once("close",()=>{gotOpts.body.fill(0)}); /* Clear data from memory */
         stream.once("error",()=>{gotOpts.body.fill(0)}); /* Clear data from memory */
     }
+    req.once("close", () => {
+        try { stream.destroy() } catch { };
+    })
     stream.pipe(res);
     return ;
 });
