@@ -51,6 +51,7 @@ app.all("/*", mainMiddleware, async (req, res)=>{
         url = new URL(url);
         if (!url.href.startsWith("http")) return res.status(400).send({error: "Only http/https supported!"});
     } catch (e) {
+        appendHeaders(res);
         fs.createReadStream("./index.html").pipe(res);
         return;
     }
@@ -64,11 +65,7 @@ app.all("/*", mainMiddleware, async (req, res)=>{
     if (SEND_REAL_IP_ON_HEADERS) _headers["dp-original-ip"] = req.ip;
     _headers["user-agent"] = _headers["user-agent"] || `KaoDataPipe/${KAO_VERSION}`;
 
-    res.setHeader("access-control-allow-origin", "*");
-    res.setHeader("access-control-allow-headers", "*");
-    res.setHeader("access-control-allow-methods", "*");
-    res.setHeader("access-control-allow-credentials", "true");
-    res.setHeader("access-control-max-age", "900");
+    appendHeaders(res);
 
     let gotOpts = {
         method: req.method,
@@ -91,6 +88,15 @@ app.all("/*", mainMiddleware, async (req, res)=>{
     stream.pipe(res);
     return ;
 });
+
+function appendHeaders(res) {
+    res.setHeader("access-control-allow-origin", "*");
+    res.setHeader("access-control-allow-headers", "*");
+    res.setHeader("access-control-allow-methods", "*");
+    res.setHeader("access-control-allow-credentials", "true");
+    res.setHeader("access-control-max-age", "900");
+    return res;
+}
 
 function parseBool(t="") {
     let result = false;
