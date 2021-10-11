@@ -12,6 +12,11 @@ http.createServer(async (req, res) => {
         targetUrl = new URL(req.url.slice(1));
         if (!targetUrl.protocol.startsWith("http")) throw "Only HTTP";
     } catch {
+        res.writeHead(400, {
+            "Access-Control-Allow-Origin": "*",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache"
+        });
         return res.status(400).send("Invalid URL!");
     }
 
@@ -36,7 +41,7 @@ http.createServer(async (req, res) => {
         response.data.pipe(res);
     } catch (err) {
         console.log(err);
-        res.writeHead(417).end();
+        res.writeHead(417).end(`${err}`);
     }
 }).listen(process.env.PORT, () => {
     console.log(`Listining port ${process.env.PORT}!`);
