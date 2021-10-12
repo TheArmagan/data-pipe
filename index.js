@@ -10,24 +10,26 @@ http.createServer(async (req, res) => {
     let targetUrl = null;
     try {
         targetUrl = new URL(req.url.slice(1));
-        if (!targetUrl.protocol.startsWith("http")) throw "Only HTTP";
+        if (!targetUrl.href.startsWith("http")) throw "Only HTTP";
     } catch {
         res.writeHead(400, {
             "Access-Control-Allow-Origin": "*",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache"
         });
-        return res.status(400).send("Invalid URL!");
+        res.writeHead(400);
+        res.write("Invalid URL!");
+        return res.end();
     }
 
     let body = await readBody(req);
     try {
         let response = await axios(targetUrl.href, {
-            method: req.method,
+            method: req.method || "GET",
             headers: req.headers,
-            data: req.method.toLowerCase() != "head" || req.method.toLowerCase() != "get" ? body : null,
+            data: !req.method || req.method.toLowerCase() == "head" || req.method.toLowerCase() == "get" ? undefined : body,
             responseType: "stream",
-            maxRedirects: 10
+            maxRedirects: 100
         });
 
         let headers = {
@@ -37,11 +39,15 @@ http.createServer(async (req, res) => {
             "Cache-Control": "no-cache"
         }
 
-        res.writeHead(response.status, response.statusText, headers);
+        res.writeHead(response.status, headers);
         response.data.pipe(res);
     } catch (err) {
         console.log(err);
-        res.writeHead(417).end(`${err}`);
+        res.writeHead(400, {
+            "content-type": "text/plain"
+        });
+        res.write(`${err}`);
+        res.end();
     }
 }).listen(process.env.PORT, () => {
     console.log(`Listining port ${process.env.PORT}!`);
