@@ -1,4 +1,4 @@
-
+require("tls").DEFAULT_ECDH_CURVE = "auto";
 const axios = require("axios").default;
 const { URL } = require('url');
 const http = require('http');
