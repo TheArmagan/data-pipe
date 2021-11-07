@@ -13,9 +13,9 @@ http.createServer(async (req, res) => {
         if (!targetUrl.href.startsWith("http")) throw "Only HTTP";
     } catch {
         res.writeHead(400, {
-            "Access-Control-Allow-Origin": "*",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache"
+            "access-control-allow-origin": "*",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
         });
         res.writeHead(400);
         res.write("Invalid URL!");
@@ -33,10 +33,10 @@ http.createServer(async (req, res) => {
         });
 
         let headers = {
-            ...response.headers,
-            "Access-Control-Allow-Origin": "*",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache"
+            ...Object.fromEntries(Object.entries(response.headers).map(i => [i[0].toLowerCase(), i[1]])),
+            "access-control-allow-origin": "*",
+            "pragma": "no-cache",
+            "cache-control": "no-cache"
         }
 
         res.writeHead(response.status, headers);
